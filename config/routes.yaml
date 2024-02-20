@@ -1,0 +1,11 @@
+app_admin_freelancer_create:
+    path: /api/admin/freelancers
+    controller: App\Controller\Admin\FreelancerApiController::create
+    methods: POST
+
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
