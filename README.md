@@ -68,6 +68,3 @@ You can now access the application in your web browser at http://localhost:8000.
 
 Accessing the Admin Panel 🔐
 To access the admin panel, navigate to http://localhost:8000/admin 
-
-Contributing 🤝
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
