@@ -68,3 +68,9 @@ You can now access the application in your web browser at http://localhost:8000.
 
 Accessing the Admin Panel 🔐
 To access the admin panel, navigate to http://localhost:8000/admin 
+
+
+
+Features coming up soon 
+
+I am currently working on a new feature. when Admin accepts the freelancers profile an email is send to the Freelancer with logins credentials and the freelancer can complete his profile and add more information of modify it.
