@@ -7,7 +7,7 @@ A brief description of what this project does and who it's for.
 Before you begin, ensure you have met the following requirements:
 
 - PHP 8.3 or higher
-- Composer
+- Composer 
 - Symfony CLI
 - Git
 - A MySQL instance running
