@@ -16,6 +16,9 @@ return [
         '/_profiler/open' => [[['_route' => '_profiler_open_file', '_controller' => 'web_profiler.controller.profiler::openAction'], null, null, null, false, false, null]],
         '/api/admin/freelancers' => [[['_route' => 'app_admin_freelancer_create', '_controller' => 'App\\Controller\\Admin\\FreelancerApiController::create'], null, ['POST' => 0], null, false, false, null]],
         '/admin' => [[['_route' => 'admin', '_controller' => 'App\\Controller\\Admin\\DashboardController::index'], null, null, null, false, false, null]],
+        '/api/jeanroc/freelancers' => [[['_route' => 'app_api_jeanroc', '_controller' => 'App\\Controller\\Api\\jeanrocController::index'], null, null, null, false, false, null]],
+        '/api/jeanroc/skills' => [[['_route' => 'app_api_jeanroc_skills', '_controller' => 'App\\Controller\\Api\\jeanrocController::getSkills'], null, null, null, false, false, null]],
+        '/api/jeanroc/freelancers/create' => [[['_route' => 'create_freelancer', '_controller' => 'App\\Controller\\Api\\jeanrocController::createFreelancer'], null, ['POST' => 0], null, false, false, null]],
         '/' => [[['_route' => 'app_home', '_controller' => 'App\\Controller\\HomeController::index'], null, null, null, false, false, null]],
         '/lucky/number' => [[['_route' => 'app_lucky_number', '_controller' => 'App\\Controller\\LuckyController::number'], null, null, null, false, false, null]],
     ],
@@ -33,27 +36,23 @@ return [
                         .'|validation_errors/([^/]++)(?'
                             .'|(*:211)'
                         .')'
-                        .'|freelancers(?'
-                            .'|/([^/\\.]++)(?:\\.([^/]++))?(*:260)'
-                            .'|(?:\\.([^/]++))?(*:283)'
-                        .')'
                     .')'
                 .')'
                 .'|/_(?'
-                    .'|error/(\\d+)(?:\\.([^/]++))?(*:325)'
-                    .'|wdt/([^/]++)(*:345)'
+                    .'|error/(\\d+)(?:\\.([^/]++))?(*:253)'
+                    .'|wdt/([^/]++)(*:273)'
                     .'|profiler/(?'
-                        .'|font/([^/\\.]++)\\.woff2(*:387)'
+                        .'|font/([^/\\.]++)\\.woff2(*:315)'
                         .'|([^/]++)(?'
                             .'|/(?'
-                                .'|search/results(*:424)'
-                                .'|router(*:438)'
+                                .'|search/results(*:352)'
+                                .'|router(*:366)'
                                 .'|exception(?'
-                                    .'|(*:458)'
-                                    .'|\\.css(*:471)'
+                                    .'|(*:386)'
+                                    .'|\\.css(*:399)'
                                 .')'
                             .')'
-                            .'|(*:481)'
+                            .'|(*:409)'
                         .')'
                     .')'
                 .')'
@@ -74,16 +73,14 @@ return [
             [['_route' => '_api_validation_errors_hydra', '_controller' => 'api_platform.symfony.main_controller', '_format' => null, '_stateless' => true, '_api_resource_class' => 'ApiPlatform\\Symfony\\Validator\\Exception\\ValidationException', '_api_operation_name' => '_api_validation_errors_hydra'], ['id'], ['GET' => 0], null, false, true, null],
             [['_route' => '_api_validation_errors_jsonapi', '_controller' => 'api_platform.symfony.main_controller', '_format' => null, '_stateless' => true, '_api_resource_class' => 'ApiPlatform\\Symfony\\Validator\\Exception\\ValidationException', '_api_operation_name' => '_api_validation_errors_jsonapi'], ['id'], ['GET' => 0], null, false, true, null],
         ],
-        260 => [[['_route' => '_api_/freelancers/{id}{._format}_get', '_controller' => 'api_platform.symfony.main_controller', '_format' => null, '_stateless' => true, '_api_resource_class' => 'App\\Entity\\Freelancer', '_api_operation_name' => '_api_/freelancers/{id}{._format}_get'], ['id', '_format'], ['GET' => 0], null, false, true, null]],
-        283 => [[['_route' => '_api_/freelancers{._format}_get_collection', '_controller' => 'api_platform.symfony.main_controller', '_format' => null, '_stateless' => true, '_api_resource_class' => 'App\\Entity\\Freelancer', '_api_operation_name' => '_api_/freelancers{._format}_get_collection'], ['_format'], ['GET' => 0], null, false, true, null]],
-        325 => [[['_route' => '_preview_error', '_controller' => 'error_controller::preview', '_format' => 'html'], ['code', '_format'], null, null, false, true, null]],
-        345 => [[['_route' => '_wdt', '_controller' => 'web_profiler.controller.profiler::toolbarAction'], ['token'], null, null, false, true, null]],
-        387 => [[['_route' => '_profiler_font', '_controller' => 'web_profiler.controller.profiler::fontAction'], ['fontName'], null, null, false, false, null]],
-        424 => [[['_route' => '_profiler_search_results', '_controller' => 'web_profiler.controller.profiler::searchResultsAction'], ['token'], null, null, false, false, null]],
-        438 => [[['_route' => '_profiler_router', '_controller' => 'web_profiler.controller.router::panelAction'], ['token'], null, null, false, false, null]],
-        458 => [[['_route' => '_profiler_exception', '_controller' => 'web_profiler.controller.exception_panel::body'], ['token'], null, null, false, false, null]],
-        471 => [[['_route' => '_profiler_exception_css', '_controller' => 'web_profiler.controller.exception_panel::stylesheet'], ['token'], null, null, false, false, null]],
-        481 => [
+        253 => [[['_route' => '_preview_error', '_controller' => 'error_controller::preview', '_format' => 'html'], ['code', '_format'], null, null, false, true, null]],
+        273 => [[['_route' => '_wdt', '_controller' => 'web_profiler.controller.profiler::toolbarAction'], ['token'], null, null, false, true, null]],
+        315 => [[['_route' => '_profiler_font', '_controller' => 'web_profiler.controller.profiler::fontAction'], ['fontName'], null, null, false, false, null]],
+        352 => [[['_route' => '_profiler_search_results', '_controller' => 'web_profiler.controller.profiler::searchResultsAction'], ['token'], null, null, false, false, null]],
+        366 => [[['_route' => '_profiler_router', '_controller' => 'web_profiler.controller.router::panelAction'], ['token'], null, null, false, false, null]],
+        386 => [[['_route' => '_profiler_exception', '_controller' => 'web_profiler.controller.exception_panel::body'], ['token'], null, null, false, false, null]],
+        399 => [[['_route' => '_profiler_exception_css', '_controller' => 'web_profiler.controller.exception_panel::stylesheet'], ['token'], null, null, false, false, null]],
+        409 => [
             [['_route' => '_profiler', '_controller' => 'web_profiler.controller.profiler::panelAction'], ['token'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],

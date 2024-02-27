@@ -21,20 +21,19 @@ class FreelancerRepository extends ServiceEntityRepository
         parent::__construct($registry, Freelancer::class);
     }
 
-//    /**
-//     * @return Freelancer[] Returns an array of Freelancer objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('f.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+  /**
+ * @return Freelancer[] Returns an array of Freelancer objects
+ */
+public function findAllActiveFreelancers(): array
+{
+    return $this->createQueryBuilder('f')
+        ->andWhere('f.status = :status')
+        ->setParameter('status', 1)
+        ->orderBy('f.id', 'ASC')
+        ->getQuery()
+        ->getResult();
+}
+
 
 //    public function findOneBySomeField($value): ?Freelancer
 //    {

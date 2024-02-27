@@ -424,7 +424,6 @@
     </parameter>
     <parameter key="api_platform.rfc_7807_compliant_errors">true</parameter>
     <parameter key="api_platform.resource_class_directories" type="collection">
-      <parameter>C:\wamp64\www\SYM\SYM\JEAN/src/ApiResource</parameter>
       <parameter>C:\wamp64\www\SYM\SYM\JEAN/src/Entity</parameter>
     </parameter>
     <parameter key="api_platform.class_name_resources" type="collection">
@@ -585,24 +584,31 @@
         <argument type="service" id=".service_locator.yTMp7CA.App\Controller\Admin\DashboardController"/>
       </call>
     </service>
-    <service id="App\Controller\Admin\FreelancerApiController" class="App\Controller\Admin\FreelancerApiController" public="true" autowire="true" autoconfigure="true">
-      <tag name="controller.service_arguments"/>
-      <tag name="container.service_subscriber"/>
-      <call method="setContainer">
-        <argument type="service" id=".service_locator.jUv.zyj.App\Controller\Admin\FreelancerApiController"/>
-      </call>
-    </service>
     <service id="App\Controller\Admin\FreelancerCrudController" class="App\Controller\Admin\FreelancerCrudController" public="true" autowire="true" autoconfigure="true">
       <tag name="ea.crud_controller"/>
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
-      <argument type="service" id="App\Service\ChoicesProvider"/>
+      <argument type="service" id="doctrine.orm.default_entity_manager"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.ZP92gqz.App\Controller\Admin\FreelancerCrudController"/>
       </call>
     </service>
-    <service id="App\Controller\Admin\FreelancerFiltersJsonData" class="App\Controller\Admin\FreelancerFiltersJsonData" autowire="true" autoconfigure="true">
-      <tag name="form.type"/>
+    <service id="App\Controller\Admin\SkillCrudController" class="App\Controller\Admin\SkillCrudController" public="true" autowire="true" autoconfigure="true">
+      <tag name="ea.crud_controller"/>
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <argument type="service" id="doctrine.orm.default_entity_manager"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.ZP92gqz.App\Controller\Admin\SkillCrudController"/>
+      </call>
+    </service>
+    <service id="App\Controller\Api\jeanrocController" class="App\Controller\Api\jeanrocController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <argument type="service" id="doctrine.orm.default_entity_manager"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.jUv.zyj.App\Controller\Api\jeanrocController"/>
+      </call>
     </service>
     <service id="App\Controller\HomeController" class="App\Controller\HomeController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
@@ -612,16 +618,14 @@
       </call>
     </service>
     <service id="App\Controller\LuckyController" class="App\Controller\LuckyController" autowire="true" autoconfigure="true"/>
-    <service id="App\Form\DataTransformer\ArrayToJsonTransformer" class="App\Form\DataTransformer\ArrayToJsonTransformer" autowire="true" autoconfigure="true"/>
-    <service id="App\Form\Type\JsonMultiSelectType" class="App\Form\Type\JsonMultiSelectType" autowire="true" autoconfigure="true">
-      <tag name="form.type"/>
-      <argument type="service" id="App\Form\DataTransformer\ArrayToJsonTransformer"/>
-    </service>
     <service id="App\Repository\FreelancerRepository" class="App\Repository\FreelancerRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
-    <service id="App\Service\ChoicesProvider" class="App\Service\ChoicesProvider" autowire="true" autoconfigure="true"/>
+    <service id="App\Repository\SkillRepository" class="App\Repository\SkillRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
     <service id="argument_metadata_factory" class="Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory"/>
     <service id="argument_resolver.backed_enum_resolver" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\BackedEnumValueResolver">
       <tag priority="100" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\BackedEnumValueResolver">controller.argument_value_resolver</tag>
@@ -652,7 +656,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
       <tag priority="-50" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">controller.argument_value_resolver</tag>
-      <argument type="service" id=".service_locator.Wt_Oqpe"/>
+      <argument type="service" id=".service_locator.7gX3HLT"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
       <tag priority="-100" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">controller.argument_value_resolver</tag>
@@ -1576,14 +1580,10 @@
       <argument type="service" id="form.registry"/>
       <argument type="collection">
         <argument>Symfony\Component\Form\Extension\Core\Type</argument>
-        <argument>App\Controller\Admin</argument>
-        <argument>App\Form\Type</argument>
         <argument>Symfony\Bridge\Doctrine\Form\Type</argument>
         <argument>EasyCorp\Bundle\EasyAdminBundle\Form\Type</argument>
       </argument>
       <argument type="collection">
-        <argument>App\Controller\Admin\FreelancerFiltersJsonData</argument>
-        <argument>App\Form\Type\JsonMultiSelectType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\FormType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\ChoiceType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\FileType</argument>
@@ -3777,7 +3777,7 @@
     </service>
     <service id="argument_resolver.not_tagged_controller" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
       <tag name="controller.argument_value_resolver" priority="-200"/>
-      <argument type="service" id=".service_locator.Wt_Oqpe"/>
+      <argument type="service" id=".service_locator.7gX3HLT"/>
     </service>
     <service id="debug.log_processor" class="Symfony\Bridge\Monolog\Processor\DebugProcessor">
       <tag name="kernel.reset" method="reset"/>
@@ -4278,7 +4278,7 @@
       <argument type="service" id="form.registry"/>
     </service>
     <service id="form.extension" class="Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension">
-      <argument type="service" id=".service_locator.PcriSCV"/>
+      <argument type="service" id=".service_locator.3l1LkXo"/>
       <argument type="collection">
         <argument key="Symfony\Component\Form\Extension\Core\Type\FormType" type="iterator">
           <argument type="service" id="form.type_extension.form.transformation_failure_handling"/>
@@ -5551,7 +5551,7 @@
     <service id="doctrine.orm.configuration" class="Doctrine\ORM\Configuration" abstract="true"/>
     <service id="doctrine.orm.entity_manager.abstract" class="Doctrine\ORM\EntityManager" lazy="true" abstract="true"/>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory">
-      <argument type="service" id=".service_locator.Ntsj8mq"/>
+      <argument type="service" id=".service_locator.eoZ15uJ"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -7389,14 +7389,12 @@
     </service>
     <service id="maker.maker.make_command" class="Symfony\Bundle\MakerBundle\Maker\MakeCommand">
       <tag name="maker.command"/>
-      <argument type="service" id="maker.php_compat_util"/>
     </service>
     <service id="maker.maker.make_twig_component" class="Symfony\Bundle\MakerBundle\Maker\MakeTwigComponent">
       <tag name="maker.command"/>
     </service>
     <service id="maker.maker.make_controller" class="Symfony\Bundle\MakerBundle\Maker\MakeController">
       <tag name="maker.command"/>
-      <argument type="service" id="maker.php_compat_util"/>
     </service>
     <service id="maker.maker.make_crud" class="Symfony\Bundle\MakerBundle\Maker\MakeCrud">
       <tag name="maker.command"/>
@@ -7414,7 +7412,6 @@
       <argument>null</argument>
       <argument type="service" id="maker.generator"/>
       <argument type="service" id="maker.entity_class_generator"/>
-      <argument type="service" id="maker.php_compat_util"/>
     </service>
     <service id="maker.maker.make_fixtures" class="Symfony\Bundle\MakerBundle\Maker\MakeFixtures">
       <tag name="maker.command"/>
@@ -7457,6 +7454,7 @@
     </service>
     <service id="maker.maker.make_serializer_normalizer" class="Symfony\Bundle\MakerBundle\Maker\MakeSerializerNormalizer">
       <tag name="maker.command"/>
+      <argument type="service" id="maker.file_manager"/>
     </service>
     <service id="maker.maker.make_subscriber" class="Symfony\Bundle\MakerBundle\Maker\MakeSubscriber">
       <tag name="maker.command"/>
@@ -8832,22 +8830,24 @@
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Admin\DashboardController" class="App\Controller\Admin\DashboardController" autowire="true" abstract="true"/>
     <service id=".instanceof.EasyCorp\Bundle\EasyAdminBundle\Contracts\Controller\DashboardControllerInterface.0.App\Controller\Admin\DashboardController" class="App\Controller\Admin\DashboardController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\Admin\DashboardController" class="App\Controller\Admin\DashboardController" autowire="true" autoconfigure="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\Admin\FreelancerApiController" class="App\Controller\Admin\FreelancerApiController" autowire="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Admin\FreelancerApiController" class="App\Controller\Admin\FreelancerApiController" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\Controller\Admin\FreelancerApiController" class="App\Controller\Admin\FreelancerApiController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\Admin\FreelancerCrudController" class="App\Controller\Admin\FreelancerCrudController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Admin\FreelancerCrudController" class="App\Controller\Admin\FreelancerCrudController" autowire="true" abstract="true"/>
     <service id=".instanceof.EasyCorp\Bundle\EasyAdminBundle\Contracts\Controller\CrudControllerInterface.0.App\Controller\Admin\FreelancerCrudController" class="App\Controller\Admin\FreelancerCrudController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\Admin\FreelancerCrudController" class="App\Controller\Admin\FreelancerCrudController" autowire="true" autoconfigure="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Controller\Admin\FreelancerFiltersJsonData" class="App\Controller\Admin\FreelancerFiltersJsonData" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\Controller\Admin\FreelancerFiltersJsonData" class="App\Controller\Admin\FreelancerFiltersJsonData" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\Admin\SkillCrudController" class="App\Controller\Admin\SkillCrudController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Admin\SkillCrudController" class="App\Controller\Admin\SkillCrudController" autowire="true" abstract="true"/>
+    <service id=".instanceof.EasyCorp\Bundle\EasyAdminBundle\Contracts\Controller\CrudControllerInterface.0.App\Controller\Admin\SkillCrudController" class="App\Controller\Admin\SkillCrudController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\Admin\SkillCrudController" class="App\Controller\Admin\SkillCrudController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\Api\jeanrocController" class="App\Controller\Api\jeanrocController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Api\jeanrocController" class="App\Controller\Api\jeanrocController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\Api\jeanrocController" class="App\Controller\Api\jeanrocController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\HomeController" class="App\Controller\HomeController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\HomeController" class="App\Controller\HomeController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\HomeController" class="App\Controller\HomeController" autowire="true" autoconfigure="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\Type\JsonMultiSelectType" class="App\Form\Type\JsonMultiSelectType" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\Form\Type\JsonMultiSelectType" class="App\Form\Type\JsonMultiSelectType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\FreelancerRepository" class="App\Repository\FreelancerRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\FreelancerRepository" class="App\Repository\FreelancerRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\SkillRepository" class="App\Repository\SkillRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\SkillRepository" class="App\Repository\SkillRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.EasyCorp\Bundle\EasyAdminBundle\Contracts\Filter\FilterConfiguratorInterface.0.EasyCorp\Bundle\EasyAdminBundle\Filter\Configurator\ChoiceConfigurator" class="EasyCorp\Bundle\EasyAdminBundle\Filter\Configurator\ChoiceConfigurator" abstract="true"/>
     <service id=".abstract.instanceof.EasyCorp\Bundle\EasyAdminBundle\Filter\Configurator\ChoiceConfigurator" class="EasyCorp\Bundle\EasyAdminBundle\Filter\Configurator\ChoiceConfigurator" abstract="true"/>
     <service id=".instanceof.EasyCorp\Bundle\EasyAdminBundle\Contracts\Filter\FilterConfiguratorInterface.0.EasyCorp\Bundle\EasyAdminBundle\Filter\Configurator\CommonConfigurator" class="EasyCorp\Bundle\EasyAdminBundle\Filter\Configurator\CommonConfigurator" abstract="true"/>
@@ -9335,14 +9335,6 @@
         <argument key="user" type="service_closure" id=".errored..service_locator.t7nLwyX.Symfony\Component\Security\Core\User\UserInterface"/>
       </argument>
     </service>
-    <service id=".service_locator.jYQR168" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator"/>
-      <argument type="collection">
-        <argument key="entityManager" type="service_closure" id="doctrine.orm.default_entity_manager"/>
-        <argument key="serializer" type="service_closure" id="debug.serializer"/>
-        <argument key="validator" type="service_closure" id="debug.validator"/>
-      </argument>
-    </service>
     <service id=".service_locator.Nb584vp" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -9409,11 +9401,31 @@
         <argument key="responseParameters" type="service_closure" id=".errored..service_locator.vMUOjiq.EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore"/>
       </argument>
     </service>
-    <service id=".service_locator.Wt_Oqpe" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.iWwbKUs" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="serializer" type="service_closure" id="debug.serializer"/>
+      </argument>
+    </service>
+    <service id=".service_locator.j9rh1Cp" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="serializer" type="service_closure" id="debug.serializer"/>
+        <argument key="skillRepository" type="service_closure" id="App\Repository\SkillRepository"/>
+      </argument>
+    </service>
+    <service id=".service_locator.jYQR168" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="entityManager" type="service_closure" id="doctrine.orm.default_entity_manager"/>
+        <argument key="serializer" type="service_closure" id="debug.serializer"/>
+        <argument key="validator" type="service_closure" id="debug.validator"/>
+      </argument>
+    </service>
+    <service id=".service_locator.7gX3HLT" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\Admin\DashboardController::configureUserMenu" type="service_closure" id=".service_locator.t7nLwyX"/>
-        <argument key="App\Controller\Admin\FreelancerApiController::create" type="service_closure" id=".service_locator.jYQR168"/>
         <argument key="App\Controller\Admin\FreelancerCrudController::autocomplete" type="service_closure" id=".service_locator.t9B7cZ4"/>
         <argument key="App\Controller\Admin\FreelancerCrudController::batchDelete" type="service_closure" id=".service_locator.twrFs.m"/>
         <argument key="App\Controller\Admin\FreelancerCrudController::configureActions" type="service_closure" id=".service_locator.UrOEf8r"/>
@@ -9435,12 +9447,35 @@
         <argument key="App\Controller\Admin\FreelancerCrudController::persistEntity" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\Admin\FreelancerCrudController::renderFilters" type="service_closure" id=".service_locator.t9B7cZ4"/>
         <argument key="App\Controller\Admin\FreelancerCrudController::updateEntity" type="service_closure" id=".service_locator.CsMkqUa"/>
+        <argument key="App\Controller\Admin\SkillCrudController::autocomplete" type="service_closure" id=".service_locator.t9B7cZ4"/>
+        <argument key="App\Controller\Admin\SkillCrudController::batchDelete" type="service_closure" id=".service_locator.twrFs.m"/>
+        <argument key="App\Controller\Admin\SkillCrudController::configureActions" type="service_closure" id=".service_locator.UrOEf8r"/>
+        <argument key="App\Controller\Admin\SkillCrudController::configureAssets" type="service_closure" id=".service_locator.wvbCcwL"/>
+        <argument key="App\Controller\Admin\SkillCrudController::configureCrud" type="service_closure" id=".service_locator.Nb584vp"/>
+        <argument key="App\Controller\Admin\SkillCrudController::configureFilters" type="service_closure" id=".service_locator.kud45L1"/>
+        <argument key="App\Controller\Admin\SkillCrudController::configureResponseParameters" type="service_closure" id=".service_locator.vMUOjiq"/>
+        <argument key="App\Controller\Admin\SkillCrudController::createEditForm" type="service_closure" id=".service_locator.Lazlz4J"/>
+        <argument key="App\Controller\Admin\SkillCrudController::createEditFormBuilder" type="service_closure" id=".service_locator.Lazlz4J"/>
+        <argument key="App\Controller\Admin\SkillCrudController::createIndexQueryBuilder" type="service_closure" id=".service_locator.lng3o3t"/>
+        <argument key="App\Controller\Admin\SkillCrudController::createNewForm" type="service_closure" id=".service_locator.Lazlz4J"/>
+        <argument key="App\Controller\Admin\SkillCrudController::createNewFormBuilder" type="service_closure" id=".service_locator.Lazlz4J"/>
+        <argument key="App\Controller\Admin\SkillCrudController::delete" type="service_closure" id=".service_locator.t9B7cZ4"/>
+        <argument key="App\Controller\Admin\SkillCrudController::deleteEntity" type="service_closure" id=".service_locator.CsMkqUa"/>
+        <argument key="App\Controller\Admin\SkillCrudController::detail" type="service_closure" id=".service_locator.t9B7cZ4"/>
+        <argument key="App\Controller\Admin\SkillCrudController::edit" type="service_closure" id=".service_locator.t9B7cZ4"/>
+        <argument key="App\Controller\Admin\SkillCrudController::index" type="service_closure" id=".service_locator.t9B7cZ4"/>
+        <argument key="App\Controller\Admin\SkillCrudController::new" type="service_closure" id=".service_locator.t9B7cZ4"/>
+        <argument key="App\Controller\Admin\SkillCrudController::persistEntity" type="service_closure" id=".service_locator.CsMkqUa"/>
+        <argument key="App\Controller\Admin\SkillCrudController::renderFilters" type="service_closure" id=".service_locator.t9B7cZ4"/>
+        <argument key="App\Controller\Admin\SkillCrudController::updateEntity" type="service_closure" id=".service_locator.CsMkqUa"/>
+        <argument key="App\Controller\Api\jeanrocController::createFreelancer" type="service_closure" id=".service_locator.jYQR168"/>
+        <argument key="App\Controller\Api\jeanrocController::getSkills" type="service_closure" id=".service_locator.j9rh1Cp"/>
+        <argument key="App\Controller\Api\jeanrocController::index" type="service_closure" id=".service_locator.iWwbKUs"/>
         <argument key="App\Kernel::loadRoutes" type="service_closure" id=".service_locator.y4_Zrx."/>
         <argument key="App\Kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.y4_Zrx."/>
         <argument key="kernel::loadRoutes" type="service_closure" id=".service_locator.y4_Zrx."/>
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.y4_Zrx."/>
         <argument key="App\Controller\Admin\DashboardController:configureUserMenu" type="service_closure" id=".service_locator.t7nLwyX"/>
-        <argument key="App\Controller\Admin\FreelancerApiController:create" type="service_closure" id=".service_locator.jYQR168"/>
         <argument key="App\Controller\Admin\FreelancerCrudController:autocomplete" type="service_closure" id=".service_locator.t9B7cZ4"/>
         <argument key="App\Controller\Admin\FreelancerCrudController:batchDelete" type="service_closure" id=".service_locator.twrFs.m"/>
         <argument key="App\Controller\Admin\FreelancerCrudController:configureActions" type="service_closure" id=".service_locator.UrOEf8r"/>
@@ -9462,6 +9497,30 @@
         <argument key="App\Controller\Admin\FreelancerCrudController:persistEntity" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\Admin\FreelancerCrudController:renderFilters" type="service_closure" id=".service_locator.t9B7cZ4"/>
         <argument key="App\Controller\Admin\FreelancerCrudController:updateEntity" type="service_closure" id=".service_locator.CsMkqUa"/>
+        <argument key="App\Controller\Admin\SkillCrudController:autocomplete" type="service_closure" id=".service_locator.t9B7cZ4"/>
+        <argument key="App\Controller\Admin\SkillCrudController:batchDelete" type="service_closure" id=".service_locator.twrFs.m"/>
+        <argument key="App\Controller\Admin\SkillCrudController:configureActions" type="service_closure" id=".service_locator.UrOEf8r"/>
+        <argument key="App\Controller\Admin\SkillCrudController:configureAssets" type="service_closure" id=".service_locator.wvbCcwL"/>
+        <argument key="App\Controller\Admin\SkillCrudController:configureCrud" type="service_closure" id=".service_locator.Nb584vp"/>
+        <argument key="App\Controller\Admin\SkillCrudController:configureFilters" type="service_closure" id=".service_locator.kud45L1"/>
+        <argument key="App\Controller\Admin\SkillCrudController:configureResponseParameters" type="service_closure" id=".service_locator.vMUOjiq"/>
+        <argument key="App\Controller\Admin\SkillCrudController:createEditForm" type="service_closure" id=".service_locator.Lazlz4J"/>
+        <argument key="App\Controller\Admin\SkillCrudController:createEditFormBuilder" type="service_closure" id=".service_locator.Lazlz4J"/>
+        <argument key="App\Controller\Admin\SkillCrudController:createIndexQueryBuilder" type="service_closure" id=".service_locator.lng3o3t"/>
+        <argument key="App\Controller\Admin\SkillCrudController:createNewForm" type="service_closure" id=".service_locator.Lazlz4J"/>
+        <argument key="App\Controller\Admin\SkillCrudController:createNewFormBuilder" type="service_closure" id=".service_locator.Lazlz4J"/>
+        <argument key="App\Controller\Admin\SkillCrudController:delete" type="service_closure" id=".service_locator.t9B7cZ4"/>
+        <argument key="App\Controller\Admin\SkillCrudController:deleteEntity" type="service_closure" id=".service_locator.CsMkqUa"/>
+        <argument key="App\Controller\Admin\SkillCrudController:detail" type="service_closure" id=".service_locator.t9B7cZ4"/>
+        <argument key="App\Controller\Admin\SkillCrudController:edit" type="service_closure" id=".service_locator.t9B7cZ4"/>
+        <argument key="App\Controller\Admin\SkillCrudController:index" type="service_closure" id=".service_locator.t9B7cZ4"/>
+        <argument key="App\Controller\Admin\SkillCrudController:new" type="service_closure" id=".service_locator.t9B7cZ4"/>
+        <argument key="App\Controller\Admin\SkillCrudController:persistEntity" type="service_closure" id=".service_locator.CsMkqUa"/>
+        <argument key="App\Controller\Admin\SkillCrudController:renderFilters" type="service_closure" id=".service_locator.t9B7cZ4"/>
+        <argument key="App\Controller\Admin\SkillCrudController:updateEntity" type="service_closure" id=".service_locator.CsMkqUa"/>
+        <argument key="App\Controller\Api\jeanrocController:createFreelancer" type="service_closure" id=".service_locator.jYQR168"/>
+        <argument key="App\Controller\Api\jeanrocController:getSkills" type="service_closure" id=".service_locator.j9rh1Cp"/>
+        <argument key="App\Controller\Api\jeanrocController:index" type="service_closure" id=".service_locator.iWwbKUs"/>
         <argument key="kernel:loadRoutes" type="service_closure" id=".service_locator.y4_Zrx."/>
         <argument key="kernel:registerContainerConfiguration" type="service_closure" id=".service_locator.y4_Zrx."/>
       </argument>
@@ -9719,11 +9778,9 @@
       <argument type="service" id="argument_resolver.query_parameter_value_resolver"/>
       <argument type="service" id="debug.stopwatch"/>
     </service>
-    <service id=".service_locator.PcriSCV" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.3l1LkXo" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
-        <argument key="App\Controller\Admin\FreelancerFiltersJsonData" type="service_closure" id="App\Controller\Admin\FreelancerFiltersJsonData"/>
-        <argument key="App\Form\Type\JsonMultiSelectType" type="service_closure" id="App\Form\Type\JsonMultiSelectType"/>
         <argument key="EasyCorp\Bundle\EasyAdminBundle\Form\Type\CrudFormType" type="service_closure" id="EasyCorp\Bundle\EasyAdminBundle\Form\Type\CrudFormType"/>
         <argument key="EasyCorp\Bundle\EasyAdminBundle\Form\Type\FileUploadType" type="service_closure" id="EasyCorp\Bundle\EasyAdminBundle\Form\Type\FileUploadType"/>
         <argument key="EasyCorp\Bundle\EasyAdminBundle\Form\Type\FiltersFormType" type="service_closure" id="EasyCorp\Bundle\EasyAdminBundle\Form\Type\FiltersFormType"/>
@@ -9852,10 +9909,11 @@
         <argument key="turbo.doctrine.event_listener" type="service_closure" id="turbo.doctrine.event_listener"/>
       </argument>
     </service>
-    <service id=".service_locator.Ntsj8mq" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.eoZ15uJ" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Repository\FreelancerRepository" type="service_closure" id="App\Repository\FreelancerRepository"/>
+        <argument key="App\Repository\SkillRepository" type="service_closure" id="App\Repository\SkillRepository"/>
       </argument>
     </service>
     <service id=".service_locator.KLVvNIq" class="Symfony\Component\DependencyInjection\ServiceLocator">
@@ -10071,15 +10129,19 @@
     <service id="EasyCorp\Bundle\EasyAdminBundle\Registry\CrudControllerRegistry" class="EasyCorp\Bundle\EasyAdminBundle\Registry\CrudControllerRegistry">
       <argument type="collection">
         <argument key="App\Controller\Admin\FreelancerCrudController">App\Entity\Freelancer</argument>
+        <argument key="App\Controller\Admin\SkillCrudController">App\Entity\Skill</argument>
       </argument>
       <argument type="collection">
         <argument key="App\Controller\Admin\FreelancerCrudController">a0c6fdc</argument>
+        <argument key="App\Controller\Admin\SkillCrudController">ac4f068</argument>
       </argument>
       <argument type="collection">
         <argument key="App\Entity\Freelancer">App\Controller\Admin\FreelancerCrudController</argument>
+        <argument key="App\Entity\Skill">App\Controller\Admin\SkillCrudController</argument>
       </argument>
       <argument type="collection">
         <argument key="a0c6fdc">App\Controller\Admin\FreelancerCrudController</argument>
+        <argument key="ac4f068">App\Controller\Admin\SkillCrudController</argument>
       </argument>
     </service>
     <service id=".service_locator.O24_MAy" class="Symfony\Component\DependencyInjection\ServiceLocator">
@@ -10201,28 +10263,6 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.yTMp7CA" method="withContext"/>
     </service>
-    <service id=".service_locator.jUv.zyj" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator"/>
-      <argument type="collection">
-        <argument key="form.factory" type="service_closure" id="form.factory" on-invalid="ignore"/>
-        <argument key="http_kernel" type="service_closure" id="http_kernel" on-invalid="ignore"/>
-        <argument key="parameter_bag" type="service_closure" id="parameter_bag" on-invalid="ignore"/>
-        <argument key="request_stack" type="service_closure" id="request_stack" on-invalid="ignore"/>
-        <argument key="router" type="service_closure" id="router.default" on-invalid="ignore"/>
-        <argument key="security.authorization_checker" type="service_closure" id="security.authorization_checker" on-invalid="ignore"/>
-        <argument key="security.csrf.token_manager" type="service_closure" id="security.csrf.token_manager" on-invalid="ignore"/>
-        <argument key="security.token_storage" type="service_closure" id="security.token_storage" on-invalid="ignore"/>
-        <argument key="serializer" type="service_closure" id="debug.serializer" on-invalid="ignore"/>
-        <argument key="twig" type="service_closure" id="twig" on-invalid="ignore"/>
-        <argument key="web_link.http_header_serializer" type="service_closure" id="web_link.http_header_serializer" on-invalid="ignore"/>
-      </argument>
-    </service>
-    <service id=".service_locator.jUv.zyj.App\Controller\Admin\FreelancerApiController" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator_context" id="App\Controller\Admin\FreelancerApiController"/>
-      <argument>App\Controller\Admin\FreelancerApiController</argument>
-      <argument type="service" id="service_container"/>
-      <factory service=".service_locator.jUv.zyj" method="withContext"/>
-    </service>
     <service id=".service_locator.ZP92gqz" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -10257,6 +10297,34 @@
       <argument>App\Controller\Admin\FreelancerCrudController</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.ZP92gqz" method="withContext"/>
+    </service>
+    <service id=".service_locator.ZP92gqz.App\Controller\Admin\SkillCrudController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\Admin\SkillCrudController"/>
+      <argument>App\Controller\Admin\SkillCrudController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.ZP92gqz" method="withContext"/>
+    </service>
+    <service id=".service_locator.jUv.zyj" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="form.factory" type="service_closure" id="form.factory" on-invalid="ignore"/>
+        <argument key="http_kernel" type="service_closure" id="http_kernel" on-invalid="ignore"/>
+        <argument key="parameter_bag" type="service_closure" id="parameter_bag" on-invalid="ignore"/>
+        <argument key="request_stack" type="service_closure" id="request_stack" on-invalid="ignore"/>
+        <argument key="router" type="service_closure" id="router.default" on-invalid="ignore"/>
+        <argument key="security.authorization_checker" type="service_closure" id="security.authorization_checker" on-invalid="ignore"/>
+        <argument key="security.csrf.token_manager" type="service_closure" id="security.csrf.token_manager" on-invalid="ignore"/>
+        <argument key="security.token_storage" type="service_closure" id="security.token_storage" on-invalid="ignore"/>
+        <argument key="serializer" type="service_closure" id="debug.serializer" on-invalid="ignore"/>
+        <argument key="twig" type="service_closure" id="twig" on-invalid="ignore"/>
+        <argument key="web_link.http_header_serializer" type="service_closure" id="web_link.http_header_serializer" on-invalid="ignore"/>
+      </argument>
+    </service>
+    <service id=".service_locator.jUv.zyj.App\Controller\Api\jeanrocController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\Api\jeanrocController"/>
+      <argument>App\Controller\Api\jeanrocController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.jUv.zyj" method="withContext"/>
     </service>
     <service id=".service_locator.jUv.zyj.App\Controller\HomeController" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\HomeController"/>
@@ -12147,7 +12215,7 @@
     <service id="ApiPlatform\Symfony\Security\ResourceAccessCheckerInterface" alias="api_platform.security.resource_access_checker"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.bJ.4HC5" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.Wt_Oqpe"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.7gX3HLT"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
@@ -12251,7 +12319,6 @@
     <service id=".service_locator.Xbsa8iG" alias="api_platform.filter_locator"/>
     <service id=".service_locator.gFlme_s" alias=".service_locator.y4_Zrx."/>
     <service id=".service_locator.uoBNKjJ" alias=".service_locator.t7nLwyX"/>
-    <service id=".service_locator.DNljvlL" alias=".service_locator.jYQR168"/>
     <service id=".service_locator.b4Agcrj" alias=".service_locator.Nb584vp"/>
     <service id=".service_locator.rr8g6a9" alias=".service_locator.wvbCcwL"/>
     <service id=".service_locator.1aiqmLQ" alias=".service_locator.UrOEf8r"/>
@@ -12262,8 +12329,11 @@
     <service id=".service_locator.9e2t_lq" alias=".service_locator.CsMkqUa"/>
     <service id=".service_locator.i.G3y1p" alias=".service_locator.Lazlz4J"/>
     <service id=".service_locator.z_typH5" alias=".service_locator.vMUOjiq"/>
+    <service id=".service_locator.MK0VIDU" alias=".service_locator.iWwbKUs"/>
+    <service id=".service_locator.zHmEDua" alias=".service_locator.j9rh1Cp"/>
+    <service id=".service_locator.DNljvlL" alias=".service_locator.jYQR168"/>
     <service id=".service_locator.8dJpptH" alias=".service_locator.yTMp7CA"/>
-    <service id=".service_locator.Q1z.f9O" alias=".service_locator.jUv.zyj"/>
     <service id=".service_locator.Tvu22ko" alias=".service_locator.ZP92gqz"/>
+    <service id=".service_locator.Q1z.f9O" alias=".service_locator.jUv.zyj"/>
   </services>
 </container>

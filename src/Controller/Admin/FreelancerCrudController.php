@@ -3,58 +3,62 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Freelancer;
+
+use App\Entity\Skill;
+
+use App\Repository\SkillRepository;
+
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
-
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 
-use App\Form\Type\JsonMultiSelectType;
-use App\Form\DataTransformer\ArrayToJsonTransformer;
+use Doctrine\ORM\EntityManagerInterface;
 
-use App\Service\ChoicesProvider;
 
 
 class FreelancerCrudController extends AbstractCrudController
 {
-    private $choicesProvider;
-    public function __construct(ChoicesProvider $choicesProvider)
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->choicesProvider = $choicesProvider;
+        $this->entityManager = $entityManager;
+
     }
 
     public static function getEntityFqcn(): string
     {
         return Freelancer::class;
     }
+   
+    public function createEntity(string $entityFqcn)
+    {
+        $freelancer = new Freelancer();
+        $freelancer->setCreatedAt(new \DateTime());
+        $freelancer->setUpdatedAt(new \DateTime());
 
+        return $freelancer;
+    }
      
     public function configureFields(string $pageName): iterable
     {
-        $choices = $this->choicesProvider->getChoices();
+        $skillRepository = $this->entityManager->getRepository(Skill::class);
+        $skills = $skillRepository->findSkillsForChoiceField();
 
-        $dataField = Field::new('Data')->hideOnIndex()
-        ->setFormType(JsonMultiSelectType::class)
-        ->setFormTypeOptions(['choices' => $choices])
-        ->addJsFiles('js/admin/data-field.js') // Optional: Add custom JS if needed for dynamic behavior
-        ->addCssFiles('css/admin/data-field.css'); // Optional: Add custom CSS
+        // Transform the skills into the expected format for ChoiceField
+        $skillChoices = [];
 
-        // Attach the data transformer
-        $dataField->setFormTypeOptions([
-            'attr' => [
-                'data-widget' => 'select2',
-            ],
-            'by_reference' => false,
-        ]);
-        $dataField->setCustomOption('dataTransformer', new ArrayToJsonTransformer());
-
+        foreach ($skills as $skill_key => $skill) {
+            $skillChoices[$skill['Name']] = $skill['id'];
+        }
 
         return [
             // IdField::new('ID'),
@@ -62,7 +66,15 @@ class FreelancerCrudController extends AbstractCrudController
             TextField::new('Last_name'),
             EmailField::new('Email'),
             NumberField::new('status'),
-            $dataField, 
+            ChoiceField::new('skills')
+                ->setLabel('Skills')
+                ->setChoices($skillChoices)
+                ->allowMultipleChoices()
+                ->setFormTypeOptions([
+                    'multiple' => true, // Enable multiple selection
+                    'expanded' => false, // Set to true if you prefer checkboxes over a select dropdown
+                ]),
+                
             TextField::new('Files')->hideOnIndex(),  
             TextEditorField::new('Description'),
             DateTimeField::new('Updated_at')->setFormTypeOptions(['disabled' => true])->onlyOnForms(),

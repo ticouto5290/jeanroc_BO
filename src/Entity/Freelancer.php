@@ -5,75 +5,61 @@ namespace App\Entity;
 use App\Repository\FreelancerRepository;
 use Doctrine\DBAL\Types\Types;
 
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
-
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource(
-        operations: [
-            new Get(normalizationContext: ['groups' => 'Freelancer:item']),
-            new GetCollection(normalizationContext: ['groups' => 'Freelancer:list'])
-        ],
-        // order: ['year' => 'DESC', 'city' => 'ASC'],
-        paginationEnabled: false,
-)]
 
 #[ORM\Entity(repositoryClass: FreelancerRepository::class)]
+#[ORM\Table(name: 'freelancer')]
 #[Broadcast]
 class Freelancer
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['Freelancer:list', 'Freelancer:item'])]
 
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['Freelancer:list', 'Freelancer:item'])]
     private ?string $Name = null;
 
-    // #[ORM\Column(nullable: true)]
-    // #[Groups(['Freelancer:list', 'Freelancer:item'])]
-    // private ?array $data = null;
-
     #[ORM\Column(type: "json", nullable: true)]
-    #[Groups(['Freelancer:list', 'Freelancer:item'])]
     private ?array $data = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['Freelancer:list', 'Freelancer:item'])]
     private ?string $last_name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['Freelancer:list', 'Freelancer:item'])]
     private ?string $Email = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
-    #[Groups(['Freelancer:list', 'Freelancer:item'])]
     private ?int $status = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['Freelancer:list', 'Freelancer:item'])]
     private ?array $files = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['Freelancer:list', 'Freelancer:item'])]
     private ?string $description = null;
+    
+
+    #[ORM\Column(type: "json", nullable: true)]
+    private $skills = [];
 
     
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['Freelancer:list', 'Freelancer:item'])]
     private ?\DateTimeInterface $Created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['Freelancer:list', 'Freelancer:item'])]
     private ?\DateTimeInterface $Updated_at = null;
+
+
+    public function __construct()
+    {
+        // Initialize skills as an empty array
+        $this->skills = [];
+    }
 
     public function getId(): ?int
     {
@@ -94,15 +80,23 @@ class Freelancer
 
     public function getData(): ?array
     {
-        return $this->data;
+       return $this->data;
     }
+
+
 
     public function setData(?array $data): self
     {
-        $this->data = $data;
+        if ($data !== null) {
+            $this->data = json_encode($data);
+        } else {
+            $this->data = null;
+        }
 
         return $this;
     }
+
+
 
     public function getLastName(): ?string
     {
@@ -160,6 +154,18 @@ class Freelancer
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getSkills(): ?array
+    {
+        return $this->skills;
+    }
+
+    public function setSkills(?array $skills): self
+    {
+        $this->skills = $skills;
 
         return $this;
     }

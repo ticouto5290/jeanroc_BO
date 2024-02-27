@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Freelancer;
+use App\Entity\Skill;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -16,26 +17,10 @@ class DashboardController extends AbstractDashboardController
     public function index(): Response
     {
         $routeBuilder = $this->container->get(AdminUrlGenerator::class);
-                $url = $routeBuilder->setController(FreelancerCrudController::class)->generateUrl();
-        
-               return $this->redirect($url);
-        // return parent::index();
+        $url = $routeBuilder->setController(FreelancerCrudController::class)->generateUrl();
 
-        // Option 1. You can make your dashboard redirect to some common page of your backend
-        //
-        // $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-        // return $this->redirect($adminUrlGenerator->setController(OneOfYourCrudController::class)->generateUrl());
-
-        // Option 2. You can make your dashboard redirect to different pages depending on the user
-        //
-        // if ('jane' === $this->getUser()->getUsername()) {
-        //     return $this->redirect('...');
-        // }
-
-        // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
-        // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
-        //
-        // return $this->render('some/path/my-dashboard.html.twig');
+        return $this->redirect($url);
+       
     }
 
     public function configureDashboard(): Dashboard
@@ -46,8 +31,9 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linktoRoute('Back to the website', 'fas fa-home', '/');
-        yield MenuItem::linkToCrud('Freelancers', 'fas fa-map-marker-alt', Freelancer::class);
+        yield MenuItem::linktoRoute('Back to the website', 'fas fa-home', '/admin');
+        yield MenuItem::linkToCrud('Freelancers', 'fas fa-user-tie', Freelancer::class);
+        yield MenuItem::linkToCrud('Skills', 'fas fa-th-list', skill::class);
            
         // yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
