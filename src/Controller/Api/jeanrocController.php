@@ -81,7 +81,7 @@ class jeanrocController extends AbstractController
 
             $subsectionsArray = [];
             foreach ($subsections as $subsection) {
-                $skills = $skillRepository->findBy(['parent' => $subsection->getId(), 'label' => 0]); // Or null for label, depending on your schema
+                $skills = $skillRepository->findBy(['parent' => $subsection->getId(), 'label' => 0]); 
                 $skillNames = array_map(fn($skill) => $skill->getName(), $skills);
 
                 $subsectionsArray[] = [

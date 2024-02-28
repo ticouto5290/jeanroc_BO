@@ -23,7 +23,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use Doctrine\ORM\EntityManagerInterface;
 
 
-
 class FreelancerCrudController extends AbstractCrudController
 {
     private $entityManager;
@@ -61,7 +60,6 @@ class FreelancerCrudController extends AbstractCrudController
         }
 
         return [
-            // IdField::new('ID'),
             TextField::new('Name'),
             TextField::new('Last_name'),
             EmailField::new('Email'),

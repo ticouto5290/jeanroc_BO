@@ -53,7 +53,7 @@ class SkillRepository extends ServiceEntityRepository
         {
             $qb = $this->createQueryBuilder('s')
                 ->andWhere('s.label = 1')
-                ->andWhere('s.parent IS NULL') // Assuming 'parent' is null for top-level sections
+                ->andWhere('s.parent IS NULL') 
                 ->getQuery();
 
             return $qb->getResult();
