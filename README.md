@@ -1,6 +1,6 @@
 # JEANROC BO 🚀
 
-A brief description of what this project does and who it's for.
+Backoffice build with symfony with CRUD for freelancers and Skills. Theres also a API with multiple method like fetching the freelancers, fetching the Skills, creation of Freelancers. The API is build to feed a react app called jeanroc
 
 ## Prerequisites 📋
 
